@@ -27,6 +27,9 @@ jobs:
           repository: ansible/ansible
           ref: ${{ matrix.ansible }}
 
+      - name: Log in to registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
       - name: Setup Go
         uses: actions/setup-go@v2
         with:
@@ -40,7 +43,7 @@ jobs:
         run: |
           Get-Content -LiteralPath $env:IMAGES |
           ForEach-Object -Process {
-              $_ -replace '^.*?image=(\S+).*?$', '$1'
+              $_ -replace '^.*?(?:image|name)=(\S+).*?$', '$1'
           } |
           & sinker create - --target $env:TARGET
 
