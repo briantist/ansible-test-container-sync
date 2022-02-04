@@ -27,6 +27,11 @@ jobs:
           repository: ansible/ansible
           ref: ${{ matrix.ansible }}
 
+      - name: Setup Go
+        uses: actions/setup-go
+        with:
+          version: ^1.16
+
       - name: Install sinker
         run: go install github.com/plexsystems/sinker@6deb84651a9129e616480890bf86b1d6e1108eaf  # v0.15.0
 
