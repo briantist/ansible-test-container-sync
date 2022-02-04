@@ -28,7 +28,7 @@ jobs:
           ref: ${{ matrix.ansible }}
 
       - name: Setup Go
-        uses: actions/setup-go
+        uses: actions/setup-go@v2
         with:
           version: ^1.16
 
