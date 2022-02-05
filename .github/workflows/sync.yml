@@ -47,6 +47,9 @@ jobs:
       - name: DEBUG
         run: cat .images.yaml
 
+      - name: Login to registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
       - name: Pull target
         run: sinker pull target
 
@@ -54,6 +57,4 @@ jobs:
         run: sinker pull source
 
       - name: Push
-        run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-          sinker push
+        run: sinker push
