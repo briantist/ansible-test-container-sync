@@ -27,9 +27,6 @@ jobs:
           repository: ansible/ansible
           ref: ${{ matrix.ansible }}
 
-      - name: Log in to registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
       - name: Setup Go
         uses: actions/setup-go@v2
         with:
@@ -54,4 +51,6 @@ jobs:
         run: sinker pull
 
       - name: Push
-        run: sinker push
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          sinker push
