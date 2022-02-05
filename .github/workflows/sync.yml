@@ -50,11 +50,5 @@ jobs:
       - name: Login to registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Pull target
-        run: sinker pull target
-
-      - name: Pull source
-        run: sinker pull source
-
       - name: Push
         run: sinker push
