@@ -47,8 +47,11 @@ jobs:
       - name: DEBUG
         run: cat .images.yaml
 
-      - name: Pull
-        run: sinker pull
+      - name: Pull target
+        run: sinker pull target
+
+      - name: Pull source
+        run: sinker pull source
 
       - name: Push
         run: |
