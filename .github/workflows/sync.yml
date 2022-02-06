@@ -78,8 +78,8 @@ jobs:
         run: |
           Get-Content -LiteralPath '${{ runner.temp }}/images.txt' |
           ForEach-Object -Process {
-              $src = $_
-              $dst = $_ -replace '^[^/]+', $env:TARGET -replace ':.*?$', ':${{ matrix.ansible }}'
+              $src = $_ -replace '^[^/]+', $env:TARGET
+              $dst = $src -replace ':.*?$', ':${{ matrix.ansible }}'
 
               & ./regctl image copy --verbosity info $src $dst
           }
