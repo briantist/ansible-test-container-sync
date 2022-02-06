@@ -54,6 +54,11 @@ jobs:
       - name: Push
         run: sinker push
 
+      - name: Get regctl
+        run: |
+          curl -L https://github.com/regclient/regclient/releases/latest/download/regctl-linux-amd64 >regctl
+          chmod 755 regctl
+
       - name: Tagify
         shell: pwsh
         run: |
@@ -62,6 +67,5 @@ jobs:
               $src = $_
               $dst = $_ -replace '^[^/]+', $env:TARGET -replace ':.*?$', ':${{ matrix.ansible }}'
 
-              & docker tag $src $dst
-              & docker push $dst
+              & regctl image copy $src $dst
           }
