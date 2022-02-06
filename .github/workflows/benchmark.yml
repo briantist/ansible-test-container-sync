@@ -1,0 +1,36 @@
+name: Benchmark ghcr.io vs quay.io (default)
+on:
+  workflow_dispatch:
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    name: ${{ matrix.ghcr && 'ghcr' || 'quay' }} - Ⓐ${{ matrix.ansible }}
+    strategy:
+      matrix:
+        ansible:
+          - stable-2.9
+          - stable-2.10
+          - stable-2.11
+          - stable-2.12
+          - milestone
+          - devel
+        ghcr:
+          - true
+          - false
+    steps:
+      - name: Python Cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ matrix.ansible }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install ansible-core (${{ matrix.ansible }})
+        run: pip install https://github.com/ansible/ansible/archive/${{ matrix.ansible }}.tar.gz --disable-pip-version-check
+
+      - name: Pull Ansible test images
+        uses: ansible-collections/community.hashi_vault/.github/actions/pull-ansible-test-images
+        with:
+          ansible-test-invocation: integration --docker ${{ matrix.ghcr && format('ghcr.io/briantist/ansible/default-test-container:{0}', matrix.ansible) || 'default' }}

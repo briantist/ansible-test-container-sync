@@ -20,11 +20,7 @@ jobs:
     env:
       IMAGES: test/lib/ansible_test/_data/completion/docker.txt
       TARGET: ghcr.io/${{ github.repository_owner }}
-      # GOBIN: ${{ github.workspace }}/bin
     steps:
-      # - name: Add GOBIN to PATH
-      #   run: echo "$GOBIN" >> $GITHUB_PATH
-
       - name: Checkout Ansible
         uses: actions/checkout@v2
         with:
@@ -42,7 +38,7 @@ jobs:
           path: |
             ~/.cache/go-build
             ~/go/pkg/mod
-          key: go-${{ hashFiles('**/go.sum') }}
+          key: go-6deb84651a9129e616480890bf86b1d6e1108eaf
           restore-keys: |
             go-
 
