@@ -42,6 +42,7 @@ jobs:
           ForEach-Object -Process {
               $_ -replace '^.*?(?:image|name)=(\S+).*?$', '$1'
           } |
+          Tee-Object -FilePath '${{ runner.temp }}/images.txt' |
           & sinker create - --target $env:TARGET
 
       - name: DEBUG
@@ -52,3 +53,15 @@ jobs:
 
       - name: Push
         run: sinker push
+
+      - name: Tagify
+        shell: pwsh
+        run: |
+          Get-Content -LiteralPath '${{ runner.temp }}/images.txt' |
+          ForEach-Object -Process {
+              $src = $_
+              $dst = $_ -replace '^[^/]+', $env:TARGET -replace ':.*?$', ':${{ matrix.ansible }}'
+
+              & docker tag $src $dst
+              & docker push $dst
+          }
