@@ -81,5 +81,5 @@ jobs:
               $src = $_
               $dst = $_ -replace '^[^/]+', $env:TARGET -replace ':.*?$', ':${{ matrix.ansible }}'
 
-              & ./regctl image copy $src $dst
+              & ./regctl image copy --verbosity info $src $dst
           }
